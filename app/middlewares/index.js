@@ -25,12 +25,12 @@ app.use(cookiesParser())
 app.use(xss())
 app.use(urlencoded({extended:true}))
 
-app.use((req, res, next)=>{
-    if(req.originalUrl.startWith('/webhook')){
-        raw({type:'application/json'})(req, res, next)
-    }else{
-        json()(req, res, next)
-    }
-})
+// app.use((req, res, next)=>{
+//     if(req.originalUrl.startWith('/webhook')){
+//         raw({type:'application/json'})(req, res, next)
+//     }else{
+//         json()(req, res, next)
+//     }
+// })
 }
 module.exports = MiddlewareRegister
