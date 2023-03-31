@@ -7,6 +7,12 @@ const userRouter = require('./User.route')
 
 const RegisterRoute = (app) =>{
 
+app.use('/', async(req, res)=>{
+    
+    res.send('Applications is Up and Running')
+})
+
+
     app.use('/api/v1/users', userRouter)
 }
 
