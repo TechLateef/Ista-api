@@ -51,7 +51,7 @@ if(!this.isModified('password')){
 UserSchema.methods.createJWT = function(){
     return jwt.sign({
         userId:this._id, name:this.name, iat:Date.now() +1000
-    }, proccess.env.jwtSecret, {
+    }, process.env.jwtSecret, {
         expiresIn:Date.now() +15 * 60 *1000
     })
 }

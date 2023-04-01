@@ -1,7 +1,8 @@
 const User = require('../models/User.model')
-const {createAndSendToken} = require('../services/Auth.service')
+const {createAndSendToken}= require('../services/Auth.service')
 const catchAsync = require('../utils/catchAsync')
-
+const {StatusCodes} = require('http-status-codes')
+const {BadRequest} = require('../errors')
 const register = (Model) => 
     catchAsync(async(req, res)=>{
         if(!req.body) {
@@ -37,7 +38,7 @@ const login = catchAsync(async(req, res)=>{
 
 
 const logOut = catchAsync(async(req, res)=>{
-    res.cookies('jwt','Log Out user',{
+    res.cookie('jwt','Log Out user',{
         expire:new Date(Date.now() + 10 *60 *1000)
     })
     res.status(StatusCodes.OK).json({msg:'User as been loged out'})

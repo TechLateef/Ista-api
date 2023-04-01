@@ -1,36 +1,41 @@
 const path = require('path')
-
-const cookiesParser = require('cookie-parser')
+const cookieParser = require('cookie-parser')
 const helmet = require('helmet')
 const xss = require('xss-clean')
 const cors = require('cors')
-const {urlencoded, json, raw, static} = require('express')
-
-
+const bodyParser = require('body-parser')
+const { urlencoded, json, raw, static } = require('express')
 
 /**
- * @param {Express} app the express app
+ * Registers all custome and external middlewares
+ * @param {Express} app The Express app
  */
+const middlewaresRegister = (app) => {
+  // Externa Libraries
+  const corsOptions ={
+    origin:'http://localhost:3000',
+    credentials:true,
+    optionsSuccessStatus:200,
+    allowedHeaders:('Content-Type', 'Authorization')
+  }
+  app.use(cors(corsOptions))
+  app.use(cookieParser())
+  app.use(helmet())
+  app.use(xss())
+  app.use(bodyParser.json());
+  app.use(urlencoded({ extended: true }))
 
+  // serve static files
+  app.use(static(path.join(__dirname, '../public')))
 
-const MiddlewareRegister = (app) =>{
-
-//external libraries
-
-//cross-origin resous sharing this prevent other server to make request to this server
-app.use(cors())
-
-app.use(cookiesParser())
-
-app.use(xss())
-app.use(urlencoded({extended:true}))
-
-// app.use((req, res, next)=>{
-//     if(req.originalUrl.startWith('/webhook')){
-//         raw({type:'application/json'})(req, res, next)
-//     }else{
-//         json()(req, res, next)
-//     }
-// })
+  // Use json for non webhook endpoints
+  app.use((req, res, next) => {
+    if (req.originalUrl.startsWith('/webhook')) {
+      raw({ type: 'application/json' })(req, res, next)
+    } else {
+      json()(req, res, next)
+    }
+  })
 }
-module.exports = MiddlewareRegister
+
+module.exports = middlewaresRegister
