@@ -1,19 +1,17 @@
+
+
 const mongoose = require('mongoose')
-require('dotenv').config()
+mongoose.set('strictQuery', false)
 mongoose.connect(
   process.env.NODE_ENV === 'production'
     ? process.env.DB_CONNECTION.replace(
         '<password>',
         process.env.DB_PASSWORD
       ).replace('<username>', process.env.DB_USERNAME)
-    : 'mongodb://localhost/ista',
+    : process.env.mongo_URI,
   {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   }
-)
-const db = mongoose.connection
-db.on('error', console.error.bind(console, 'connection error: '))
-db.once('open', function () {
-  console.log('Connected successfully')
-})
+).then(()=> { console.log("Connected to  mongodb")})
+.catch(ex => console.log(ex))
