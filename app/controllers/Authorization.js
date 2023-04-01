@@ -2,7 +2,7 @@ const User = require('../models/User.model')
 const {createAndSendToken}= require('../services/Auth.service')
 const catchAsync = require('../utils/catchAsync')
 const {StatusCodes} = require('http-status-codes')
-const {BadRequest} = require('../errors')
+const {BadRequest, UnAuthenticated, InternalServerError, NotFound} = require('../errors')
 const register = (Model) => 
     catchAsync(async(req, res)=>{
         if(!req.body) {
